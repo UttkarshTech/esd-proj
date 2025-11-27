@@ -32,6 +32,7 @@ public class SecurityConfig {
             .cors(cors -> cors.disable()) // Configure CORS as needed
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login/**", "/error", "/oauth2/**").permitAll()
+                .requestMatchers("/api/departments/**", "/api/employees/**").authenticated()
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2

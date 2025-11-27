@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Successful</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            color: #11998e;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+        
+        .user-info {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        
+        .user-info p {
+            color: #666;
+            margin: 0.5rem 0;
+            font-size: 1rem;
+        }
+        
+        .user-info strong {
+            color: #333;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: #11998e;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0d7a72;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #11998e;
+            border: 2px solid #11998e;
+        }
+        
+        .btn-secondary:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">✅</div>
+        <h1>Login Successful!</h1>
+        <p>Welcome! You have been successfully authenticated.</p>
+        
+        <div class="user-info" th:if="${email}">
+            <p><strong>Name:</strong> <span th:text="${name}">User Name</span></p>
+            <p><strong>Email:</strong> <span th:text="${email}">user@example.com</span></p>
+        </div>
+        
+        <div class="btn-group">
+            <a href="/api/auth/user" class="btn btn-primary">View Profile</a>
+            <a href="/api/auth/status" class="btn btn-secondary">Check Status</a>
+        </div>
+    </div>
+</body>
+</html>

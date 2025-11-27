@@ -19,14 +19,13 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                                         Authentication authentication) throws IOException, ServletException {
         
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        String email = oAuth2User.getAttribute("email");
+        String name = oAuth2User.getAttribute("name");
         
-        // Build success redirect URL with user info
-        String targetUrl = UriComponentsBuilder.fromUriString("/login/success")
-                .queryParam("email", (Object) oAuth2User.getAttribute("email"))
-                .queryParam("name", (Object) oAuth2User.getAttribute("name"))
-                .build()
-                .toUriString();
+        // Log successful authentication
+        System.out.println("OAuth2 Login successful for user: " + email);
         
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        // Redirect to frontend application
+        response.sendRedirect("http://localhost:5174/");
     }
 }

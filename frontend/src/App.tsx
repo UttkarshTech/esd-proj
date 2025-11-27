@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider } from '@/components/theme-provider';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { Header } from '@/components/layout/Header';
+import { Toaster } from '@/components/ui/toaster';
+import { LoginPage } from '@/pages/LoginPage';
+import { DepartmentsPage } from '@/pages/DepartmentsPage';
+import { DepartmentDetailPage } from '@/pages/DepartmentDetailPage';
+import { EmployeesPage } from '@/pages/EmployeesPage';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            
+            <Route
+              path="/*"
+              element={
+                <ProtectedRoute>
+                  <div className="min-h-screen bg-background">
+                    <Header />
+                    <Routes>
+                      <Route path="/departments" element={<DepartmentsPage />} />
+                      <Route path="/departments/:id" element={<DepartmentDetailPage />} />
+                      <Route path="/employees" element={<EmployeesPage />} />
+                      <Route path="/" element={<Navigate to="/departments" replace />} />
+                    </Routes>
+                  </div>
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+          <Toaster />
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;

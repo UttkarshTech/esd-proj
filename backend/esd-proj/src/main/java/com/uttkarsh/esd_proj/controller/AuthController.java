@@ -54,4 +54,50 @@ public class AuthController {
         
         return ResponseEntity.ok(response);
     }
+    
+    /**
+     * Logout endpoint - invalidates session and clears authentication
+     * Only accessible to authenticated users
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@AuthenticationPrincipal OAuth2User principal,
+                                     jakarta.servlet.http.HttpServletRequest request,
+                                     jakarta.servlet.http.HttpServletResponse response) {
+        if (principal == null) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Not authenticated");
+            error.put("message", "No active session to logout");
+            return ResponseEntity.status(401).body(error);
+        }
+        
+        try {
+            // Get user email before invalidating session
+            String email = principal.getAttribute("email");
+            
+            // Invalidate the session
+            request.getSession().invalidate();
+            
+            // Clear authentication context
+            org.springframework.security.core.context.SecurityContextHolder.clearContext();
+            
+            // Clear cookies
+            jakarta.servlet.http.Cookie cookie = new jakarta.servlet.http.Cookie("JSESSIONID", null);
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+            
+            // Return success response
+            Map<String, String> successResponse = new HashMap<>();
+            successResponse.put("message", "Logged out successfully");
+            successResponse.put("user", email);
+            
+            return ResponseEntity.ok(successResponse);
+            
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Logout failed");
+            error.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(error);
+        }
+    }
 }
